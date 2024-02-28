@@ -44,6 +44,8 @@ void none_interactive(char **argv, size_t j, struct stat st, path_l *path)
 		c_s = getline(&com, &com_size, stdin);
 		if (c_s == -1)
 		{
+			free_list(path);
+			free(com);
 			exit(0);
 		}
 		com[c_s - 1] = '\0';
@@ -84,6 +86,8 @@ void interactive(char **argv, size_t j, struct stat st, path_l *path)
 		c_s = getline(&com, &com_size, stdin);
 		if (c_s == -1)
 		{
+			free_list(path);
+			free(com);
 			write(1, "\n", 2);
 			exit(0);
 		}
