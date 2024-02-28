@@ -17,7 +17,7 @@ int main(int argc, char **argv, char **env)
 	(void)(argc);
 	j = where_null(env);
 	path = build_path();
-	if (isatty(1))
+	if (isatty(0))
 		interactive(argv, j, st, path);
 	else
 		none_interactive(argv, j, st, path);
@@ -33,13 +33,23 @@ int main(int argc, char **argv, char **env)
  */
 void none_interactive(char **argv, size_t j, struct stat st, path_l *path)
 {
-	char **args;
-	size_t i, n;
+	char **args, *com;
+	size_t com_size, i;
+	ssize_t c_s;
 	int w;
 
-	for (i = 1, n = 1;; free_strings(args), i++, n++)
+	for (com = NULL, i = 1;; free_strings(args), i++)
 	{
-		args = &argv[n];
+		com_size = 0;
+		c_s = getline(&com, &com_size, stdin);
+		if (c_s == -1)
+		{
+			exit(0);
+		}
+		com[c_s - 1] = '\0';
+		set_null(com);
+		args = strtoargs(com);
+		free(com);
 		if (!args)
 			continue;
 		if (stat(args[0], &st) == 0)
