@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+extern char **environ;
+int _getenv_for_setenv(const char *name)
+{
+        int i, j;
+
+        if (!name)
+                return (NULL);
+        for (i = 0; environ[i]; i++)
+        {
+                for (j = 0; environ[i][j] == name[j]; j++)
+                        ;
+                if (name[j] == '\0' && environ[i][j] == '=')
+                        return (i);
+        }
+        return (-1);
+}
+size_t _strlen(const char *s)
+{
+        size_t i;
+
+        if (!s)
+                return (0);
+        i = 0;
+        while (s[i] != '\0')
+                i++;
+        return (i);
+}
+int check_equal(const char *name)
+{
+        for (; *name; name++)
+                if (*name == '=')
+                        return (0);
+        return (-1);
+}
+int _unsetenv(const char *name)
+{
+	int i;
+
+	if (!name || _strlen(name) == 0 || check_equal(name) == 0)
+		return (-1);
+	i = _getenv_for_setenv(name);
+	if (i >= 0)
+	{
+		free(environ[i]);
+		while (environ[i])
+			environ[i] = environ[++i];
+	}
+	return (0);
+}
