@@ -32,7 +32,7 @@ char *str_concat(char *s1, char *s2)
 		s1 = &ss[0];
 	if (s2 == NULL)
 		s2 = &ss[0];
-	s = malloc(sizeof(char) * (_strlen(s1) + _strlen(s2) + 1));
+	s = _calloc((_strlen(s1) + _strlen(s2) + 10), 1);
 	if (s == NULL)
 		return (NULL);
 	for (i = 0; i < _strlen(s1); i++)
@@ -54,9 +54,9 @@ int find_in_path(char **args, path_l *p)
 	char *c, *dic, *com;
 	struct stat s;
 
-	if (!args || !*args || !p)
+	if (!args || !*args)
 		return (-1);
-	c = strdup(args[0]);
+	c = _strdup(args[0]);
 	if (!c)
 		return (-1);
 	for (; p; free(dic), free(com))
@@ -75,35 +75,6 @@ int find_in_path(char **args, path_l *p)
 	}
 	free(c);
 	return (-1);
-}
-/**
- * str_concat_pro - connect make s1 composed of s1 & s2
- *
- * @s1: 1st string
- * @s2: 2nd string
- * Return: void
-*/
-void str_concat_pro(char **s1, char *s2)
-{
-	int i, j;
-	char *s, ss[] = "\0";
-
-	if (*s1 == NULL)
-		*s1 = &ss[0];
-	if (s2 == NULL)
-		s2 = &ss[0];
-	s = malloc(sizeof(char) * (_strlen(*s1) + _strlen(s2) + 1));
-	if (s == NULL)
-		return;
-	for (i = 0; i < _strlen(*s1); i++)
-	{
-		s[i] = *s1[i];
-	}
-	for (j = 0; s2[j] != '\0'; j++, i++)
-		s[i] = s2[j];
-	s[i] = '\0';
-	free(*s1);
-	*s1 = s;
 }
 /**
  * not_found - print error of not finding the command

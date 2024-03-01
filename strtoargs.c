@@ -11,7 +11,7 @@ char **strtoargs(char *ptr)
 	char **s, *p, *str;
 	int i, w;
 
-	str = strdup(ptr);
+	str = _strdup(ptr);
 	for (i = w = 0; str[i];)
 	{
 		if (str[i] == ' ')
@@ -25,13 +25,13 @@ char **strtoargs(char *ptr)
 	}
 	if (w == 0)
 		return (NULL);
-	s = malloc(sizeof(char *) * (w + 1));
+	s = _calloc(w + 1, sizeof(char *));
 	if (!s)
 		return (NULL);
 	p = strtok(str, " ");
 	for (i = 0; p; i++)
 	{
-		s[i] = strdup(p);
+		s[i] = _strdup(p);
 		p = strtok(NULL, " ");
 	}
 	s[w] = NULL;
@@ -67,7 +67,7 @@ char *_strdup(char *str)
 	if (str == NULL)
 		return (NULL);
 	i = _strlen(str);
-	s = malloc(sizeof(char) * (i + 1));
+	s = _calloc(i + 1, 1);
 	if (s == NULL)
 		return (NULL);
 	for (j = 0; j != i; j++)
@@ -107,7 +107,7 @@ void *_calloc(unsigned int nmemb, unsigned int size)
 
 	if (nmemb == 0 || size == 0)
 		return (NULL);
-	ptr = malloc(nmemb * size);
+	ptr = malloc((nmemb) * size);
 	if (ptr == 0)
 		return (NULL);
 	s = ptr;
