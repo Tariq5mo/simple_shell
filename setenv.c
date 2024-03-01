@@ -52,10 +52,9 @@ int _setenv(const char *name, const char *value, int overwrite)
 	i = _getenv_for_setenv(name);
 	if (i < 0)/*name isn't exist in Environment*/
 	{
-		i = 0;
-		while (environ[i])
+		for (i = 0; environ[i];)
 			i++;
-		environ[i++] = _calloc(strlen(name) + strlen(value) + 1, 1);
+		environ[i++] = _calloc(strlen(name) + strlen(value) + 5, 1);
 		environ[i] = NULL;
 		for (j = 0, --i; name[j]; j++)
 			environ[i][j] = name[j];
@@ -67,13 +66,14 @@ int _setenv(const char *name, const char *value, int overwrite)
 	}
 	else if (i >= 0 && overwrite != 0)
 	{
-		s = _calloc(strlen(name) + strlen(value) + 1, 1);
+		s = _calloc(strlen(name) + strlen(value) + 5, 1);
 		for (j = 0; environ[i][j] != '='; j++)
 			s[j] = environ[i][j];
 		s[j++] = '=';
 		for (k = 0; value[k]; j++, k++)
 			s[j] = value[k];
 		s[j] = '\0';
+		environ[i] = realloc(environ[i], 0);
 		environ[i] = s;
 		return (0);
 	}
@@ -95,7 +95,7 @@ int _unsetenv(const char *name)
 	i = _getenv_for_setenv(name);
 	if (i >= 0)
 	{
-		free(environ[i]);
+		environ[i] = realloc(environ[i], 0);
 		for (; environ[i]; i++)
 			environ[i] = environ[i + 1];
 	}

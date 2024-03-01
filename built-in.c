@@ -15,6 +15,7 @@ void ex(char **av, char **as, size_t i, path_l *path, int j)
 
 	if (!as[1])
 	{
+
 		for (; environ[j]; j++)
 			free(environ[j]);
 		free_list(path);
@@ -79,7 +80,7 @@ void error_exit(char **av, char **as, size_t i)
 	c = str_concat(e, as[1]);
 	free(e);
 	e = str_concat(c, "\n");
-	write(2, e, _strlen(e) + 1);
+	write(2, e, _strlen(e));
 	free(e);
 	free(c);
 	free(pid);
@@ -96,6 +97,6 @@ void _env(char **en)
 	for (i = 0; en[i]; i++)
 	{
 		write(1, en[i], _strlen(en[i]));
-		write(1, "\n", 2);
+		write(1, "\n", 1);
 	}
 }

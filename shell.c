@@ -6,7 +6,8 @@
  * @argc: the number of arguments
  * @argv: the arguments of shell
  * @env: pointer to The Environment
- * Return: 0 Success, -1 on failure
+ * Return: 0 S
+uccess, -1 on failure
  */
 int main(int argc, char **argv, char **env)
 {
@@ -81,8 +82,7 @@ void interactive(char **argv, size_t j, struct stat st, path_l *path)
 	for (com = NULL, i = 1;; free_strings(args), i++)
 	{
 		com_size = 0;
-		if (!argv[1])
-			write(1, "($) ", 5);
+		write(1, "($) ", 5);
 		c_s = getline(&com, &com_size, stdin);
 		if (c_s == -1)
 		{

@@ -12,7 +12,7 @@ char **strtoargs(char *ptr)
 	int i, w;
 
 	str = _strdup(ptr);
-	for (i = w = 0; str[i];)
+	for (i = w = 0; str[i];)/*how many words in ptr*/
 	{
 		if (str[i] == ' ')
 			i++;
@@ -24,11 +24,14 @@ char **strtoargs(char *ptr)
 		}
 	}
 	if (w == 0)
+	{
+		free(str);
 		return (NULL);
+	}
 	s = _calloc(w + 1, sizeof(char *));
 	if (!s)
 		return (NULL);
-	p = strtok(str, " ");
+	p = strtok(str, " \0");
 	for (i = 0; p; i++)
 	{
 		s[i] = _strdup(p);

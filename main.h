@@ -54,6 +54,7 @@ int _getenv_for_setenv(const char *name);
 int _unsetenv(const char *name);
 void _cd(char **av, char **as, size_t j);
 void free_list(path_l *head);
+int *f(int n);
 int where_null(char **env);
 void change_dir(char **as, char *pwd, char *oldpwd, size_t i);
 #endif/*endif*/
