@@ -1,11 +1,18 @@
+/**
+ * This file contains utility functions used throughout the shell
+ * Implements string comparison, number conversion, and comment handling
+ */
+
 #include "main.h"
 
 /**
- * _strcmp - compare between two strings
+ * _strcmp - performs string comparison
+ * Used for command matching and string equality checks
+ * Case-sensitive comparison of two strings
  *
- * @s1: first string
- * @s2: second string
- * Return: 0 are equals, 1 s1 > s2, -1 s1 < s2
+ * @s1: first string to compare
+ * @s2: second string to compare
+ * Return: 0 if equal, positive if s1 > s2, negative if s1 < s2
  */
 int _strcmp(char *s1, char *s2)
 {
@@ -16,11 +23,14 @@ int _strcmp(char *s1, char *s2)
 	j = s1[i] - s2[i];
 	return (j);
 }
+
 /**
- * _atoi - Convert string to number
+ * _atoi - converts string to integer
+ * Handles positive and negative numbers
+ * Implements overflow protection for INT_MAX/MIN
  *
- * @s: the string
- * Return: the number
+ * @s: string to convert
+ * Return: converted integer value
  */
 int _atoi(char *s)
 {
@@ -52,10 +62,13 @@ int _atoi(char *s)
 		return (0);
 	return (num * sign);
 }
+
 /**
- * set_null - set first '#' to '\0'
+ * set_null - handles comment removal in command strings
+ * Terminates string at first '#' character
+ * Essential for implementing comment functionality
  *
- * @s: the string
+ * @s: command string to process
  */
 void set_null(char *s)
 {

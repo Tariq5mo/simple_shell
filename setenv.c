@@ -1,10 +1,17 @@
+/**
+ * This file implements environment variable management functionality
+ * Handles setting, updating, and removing environment variables
+ */
+
 #include "main.h"
 
 /**
- * _getenv_for_setenv - special version of getenv
+ * _getenv_for_setenv - finds index of environment variable by name
+ * Special version optimized for setenv operations
+ * Searches environment array for matching variable name
  *
- * @name: a string which PATH usually
- * Return: the index of PATH in environment, -1 on failure
+ * @name: environment variable name to find
+ * Return: index of variable in environ array, -1 if not found
  */
 int _getenv_for_setenv(const char *name)
 {
@@ -21,11 +28,14 @@ int _getenv_for_setenv(const char *name)
 	}
 	return (-1);
 }
+
 /**
- * check_equal - check if the name content an equal
+ * check_equal - validates environment variable name format
+ * Ensures name doesn't contain equals sign
+ * Required for proper environment variable syntax
  *
- * @name: the name of the variable
- * Return: 0 there is an equal, -1 there isn't an equal
+ * @name: variable name to check
+ * Return: 0 if equals found, -1 if valid (no equals)
  */
 int check_equal(const char *name)
 {
@@ -34,12 +44,15 @@ int check_equal(const char *name)
 			return (0);
 	return (-1);
 }
+
 /**
- * _setenv - changes or adds an environment variable
+ * _setenv - adds or modifies environment variable
+ * Allocates new memory for variable if needed
+ * Updates existing variable if overwrite allowed
  *
- * @name: the variable's name
- * @value: the variable's value
- * @overwrite: determine if overwrite valid or not
+ * @name: variable name
+ * @value: variable value
+ * @overwrite: flag to allow overwriting existing variable
  * Return: 0 on success, -1 on failure
  */
 int _setenv(const char *name, const char *value, int overwrite)
@@ -50,7 +63,7 @@ int _setenv(const char *name, const char *value, int overwrite)
 	if (!name || _strlen((char *)name) == 0 || check_equal(name) == 0)
 		return (-1);
 	i = _getenv_for_setenv(name);
-	if (i < 0)/*name isn't exist in Environment*/
+	if (i < 0) /*name isn't exist in Environment*/
 	{
 		for (i = 0; environ[i];)
 			i++;
@@ -80,10 +93,13 @@ int _setenv(const char *name, const char *value, int overwrite)
 	else
 		return (0);
 }
+
 /**
- * _unsetenv - unset an environment variable
+ * _unsetenv - removes environment variable
+ * Deallocates memory and adjusts environ array
+ * Maintains environment array integrity
  *
- * @name: the name of the variable
+ * @name: name of variable to remove
  * Return: 0 on success, -1 on failure
  */
 int _unsetenv(const char *name)

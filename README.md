@@ -1,140 +1,73 @@
-# 0x16. C - Simple Shell
+# Simple Shell Implementation
 
-This project is about creating a simple UNIX command interpreter in C as part of the ALX Software Engineering program. It focuses on understanding the basics of shell functionalities, process management, and system calls.
+## Overview
 
-## Table of Contents
+A lightweight UNIX command interpreter written in C, developed as part of the ALX Software Engineering program. This shell supports basic command execution, built-in commands, and environment variable management.
 
-- [Introduction](#introduction)
-- [Background](#background)
-- [Team](#team)
-- [Concepts](#concepts)
-- [Learning Objectives](#learning-objectives)
-- [Requirements](#requirements)
-- [Compilation](#compilation)
-- [Testing](#testing)
-- [Tasks](#tasks)
-- [Authors](#authors)
+## Quick Start
 
----
+```bash
+# Compile the shell
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 
-## Introduction
+# Run in interactive mode
+./hsh
 
-This project involves writing a simple UNIX command interpreter, commonly known as a shell. The shell provides an interface for users to interact with the operating system by executing commands.
+# Run in non-interactive mode
+echo "/bin/ls" | ./hsh
+```
 
-## Background
+## Features
 
-The Simple Shell project is a challenging and anticipated project that tests my understanding of:
+- **Command Execution**: Execute standard Unix commands
+- **Built-in Commands**:
+  - `cd` - Change directory
+  - `exit` - Exit the shell
+  - `env` - Display environment variables
+  - `setenv` - Set environment variables
+  - `unsetenv` - Unset environment variables
+- **Path Resolution**: Automatically finds executables in PATH
+- **Error Handling**: Comprehensive error messages
+- **Memory Management**: No memory leaks
+- **Comment Support**: Lines starting with '#'
 
-- Basic programming concepts
-- C programming language
-- Engineering thinking
-- Group work
-- Learning how to learn
+## Project Structure
 
-It is crucial to avoid copying code or looking at solutions from others. Focus on understanding and building the shell from scratch.
+```
+.
+├── shell.c          # Main shell implementation
+├── built-in.c       # Built-in command handlers
+├── cd.c            # Directory navigation
+├── find_path.c     # PATH resolution
+├── strtoargs.c     # Command parsing
+├── setenv.c        # Environment variable management
+├── main.h          # Header definitions
+└── README.md       # Documentation
+```
 
-## Team
+## Technical Details
 
-This project was completed in teams of two. Our team consists of:
-
-- Talal Omer
-- Tariq Omer
-
-## Concepts
-
-Key concepts covered in this project include:
-
-- Team Projects and Pair Programming
-- Understanding the UNIX shell
-- Process management (PID, PPID)
-- Environment manipulation
-- System calls (execve, fork, wait)
-- PATH variable
-- Error handling
-
-## Learning Objectives
-
-By the end of this project, I should be able to explain the following without assistance:
-
-- The creators of the original Unix operating system and the first UNIX shell.
-- The inventor of the B programming language.
-- The role and significance of Ken Thompson.
-- How a shell operates.
-- Understanding PID and PPID.
-- Manipulating the environment of the current process.
-- Distinguishing between functions and system calls.
-- Creating processes.
-- Understanding the prototypes of `main`.
-- How the shell uses the PATH to locate programs.
-- Executing programs using the `execve` system call.
-- Suspending process execution until child termination.
-- Understanding EOF (End-of-File).
-
-## Requirements
-
-### General
+### Requirements
 
 - **Allowed editors:** `vi`, `vim`, `emacs`
 - **Compilation:** Ubuntu 20.04 LTS using `gcc` with options `-Wall -Werror -Wextra -pedantic -std=gnu89`
-- All files must end with a new line
-- A `README.md` file is mandatory
-- Code should adhere to the Betty style (checked using `betty-style.pl` and `betty-doc.pl`)
-- No memory leaks
-- Maximum 5 functions per file
-- Header files should be include-guarded
-- Use system calls only when necessary
-
-### Output
-
-- Your program must have the exact same output as `sh (/bin/sh)` and the same error output.
-- The program name in error messages must match `argv[0]`.
+- **Code Style:** Betty style compliant
+- **Memory:** No memory leaks
+- **Functions:** Maximum 5 functions per file
+- **Headers:** Include guarded
 
 ### Allowed Functions and System Calls
 
-- `access` (man 2 access)
-- `chdir` (man 2 chdir)
-- `close` (man 2 close)
-- `closedir` (man 3 closedir)
-- `execve` (man 2 execve)
-- `exit` (man 3 exit)
-- `_exit` (man 2 _exit)
-- `fflush` (man 3 fflush)
-- `fork` (man 2 fork)
-- `free` (man 3 free)
-- `getcwd` (man 3 getcwd)
-- `getline` (man 3 getline)
-- `getpid` (man 2 getpid)
-- `isatty` (man 3 isatty)
-- `kill` (man 2 kill)
-- `malloc` (man 3 malloc)
-- `open` (man 2 open)
-- `opendir` (man 3 opendir)
-- `perror` (man 3 perror)
-- `read` (man 2 read)
-- `readdir` (man 3 readdir)
-- `signal` (man 2 signal)
-- `stat` (__xstat) (man 2 stat)
-- `lstat` (__lxstat) (man 2 lstat)
-- `fstat` (__fxstat) (man 2 fstat)
-- `strtok` (man 3 strtok)
-- `wait` (man 2 wait)
-- `waitpid` (man 2 waitpid)
-- `wait3` (man 2 wait3)
-- `wait4` (man 2 wait4)
-- `write` (man 2 write)
+- Basic I/O: `access`, `read`, `write`
+- Process Control: `fork`, `wait`, `waitpid`, `execve`
+- Memory Management: `malloc`, `free`
+- Directory Operations: `chdir`, `getcwd`, `opendir`, `readdir`, `closedir`
+- String Manipulation: `strtok`
+- Error Handling: `perror`, `exit`
 
-## Compilation
-
-my shell will be compiled using:
-
-```bash
-gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
-```
-
-## Testing
+## Development and Testing
 
 ### Interactive Mode
-
 ```bash
 $ ./hsh
 ($) /bin/ls
@@ -145,104 +78,129 @@ $
 ```
 
 ### Non-Interactive Mode
-
 ```bash
 $ echo "/bin/ls" | ./hsh
 hsh main.c shell.c test_ls_2
-$
-$ cat test_ls_2
-/bin/ls
-/bin/ls
-$
-$ cat test_ls_2 | ./hsh
-hsh main.c shell.c test_ls_2
-hsh main.c shell.c test_ls_2
-$
 ```
+
+## Implementation Tasks
+
+1. **Basic Shell (0.1-0.4)**
+   - Command interpreter implementation
+   - Argument handling
+   - PATH resolution
+   - Exit built-in
+
+2. **Environment Management (1.0)**
+   - Env built-in implementation
+   - Environment variable handling
+
+3. **Advanced Features**
+   - Custom getline implementation
+   - Built-in command enhancements
+   - Logical operators
+   - Variable replacement
+   - Comment handling
+   - File input support
 
 ## Tasks
 
-### 0. Betty would be proud (mandatory)
+### 0. Betty would be proud
+- Follow the Betty style guide
+- No errors from Betty-style checks
 
-Write code that passes the Betty checks.
+### 1. Simple Shell 0.1
+- Display a prompt and wait for user input
+- Execute commands with their arguments
+- Handle errors
+- Handle the "end of file" condition (Ctrl+D)
 
-### 1. Simple shell 0.1 (mandatory)
+### 2. Simple Shell 0.2
+- Handle command lines with arguments
+- Implement PATH handling
+- Don't call fork if command doesn't exist
 
-Write a UNIX command line interpreter.
+### 3. Simple Shell 0.3
+- Handle the PATH
+- Implement fork must not be called if command doesn't exist
 
-- Usage: `simple_shell`
-- Display a prompt and wait for the user to type a command.
-- The prompt is displayed again each time a command has been executed.
-- Command lines are simple, with no semicolons, pipes, or redirections.
-- Command lines consist of only one word (no arguments).
-- If an executable cannot be found, print an error message and display the prompt again.
-- Handle errors and the “end of file” condition (Ctrl+D).
-- Do not use the PATH, implement built-ins, or handle special characters.
-- `execve` is the core part of your Shell.
+### 4. Simple Shell 0.4
+- Implement the exit built-in
+- Usage: exit
+- No arguments handling needed
 
-### 2. Simple shell 0.2 (mandatory)
+### 5. Simple Shell 1.0
+- Implement the env built-in
+- Print current environment
 
-Simple shell 0.1 + Handle command lines with arguments.
+### 6. Simple Shell 0.1.1
+- Write your own getline function
+- Use a buffer to read many chars at once
+- Minimize the number of read system calls
 
-### 3. Simple shell 0.3 (mandatory)
+### 7. Simple Shell 0.2.1
+- Handle arguments for the built-in exit
+- Usage: exit status
 
-Simple shell 0.2 + Handle the PATH. `fork` must not be called if the command doesn’t exist.
+### 8. Simple Shell 0.4.1
+- Handle Ctrl+C
+- Shell should not quit when user inputs ^C
 
-### 4. Simple shell 0.4 (mandatory)
+### 9. setenv, unsetenv
+- Implement the setenv and unsetenv builtin commands
+- setenv: Initialize/modify environment variable
+- unsetenv: Remove environment variable
 
-Simple shell 0.3 + Implement the `exit` built-in command.
+### 10. cd
+- Implement the builtin command cd
+- Handle the command line argument
+- Update PWD environment variable
 
-### 5. Simple shell 1.0 (mandatory)
+### 11. ;
+- Handle the commands separator ;
 
-Simple shell 0.4 + Implement the `env` built-in command.
+### 12. && and ||
+- Handle the && and || shell logical operators
 
-### 6. Simple shell 0.1.1 (#advanced)
+### 13. alias
+- Implement the alias builtin command
+- Usage: alias [name[='value'] ...]
 
-Simple shell 0.1 + Write your own `getline` function.
+### 14. Variables
+- Handle variables replacement
+- Handle $? variable
+- Handle $$ variable
 
-### 7. Simple shell 0.2.1 (#advanced)
+### 15. Comments
+- Handle comments (#)
 
-Simple shell 0.2 + You are not allowed to use `strtok`.
+### 16. File as input
+- Usage: simple_shell [filename]
+- Execute commands from file
 
-### 8. Simple shell 0.4.1 (#advanced)
+## Team
 
-Simple shell 0.4 + Handle arguments for the built-in `exit`.
+- **Talal Omer**
+  - GitHub: [talalOmer](https://github.com/talalOmer)
+- **Tariq Omer**
+  - GitHub: [tariqOmer](https://github.com/Tariq5mo)
 
-### 9. setenv, unsetenv (#advanced)
+## Additional Resources
 
-Simple shell 1.0 + Implement the `setenv` and `unsetenv` builtin commands.
+- [Unix Shell Documentation](http://man7.org/linux/man-pages/man1/sh.1.html)
+- [Writing a Shell in C](https://brennan.io/2015/01/16/write-a-shell-in-c/)
+- [Linux System Calls](http://man7.org/linux/man-pages/man2/syscalls.2.html)
 
-### 10. cd (#advanced)
+---
 
-Simple shell 1.0 + Implement the builtin command `cd`.
+## Learning Objectives
 
-### 11. ; (#advanced)
+By the end of this project, developers should understand:
+- Unix shell operation and design
+- Process management (PID, PPID)
+- Environment manipulation
+- System calls vs. functions
+- Program execution with execve
+- EOF handling
 
-Simple shell 1.0 + Handle the commands separator `;`.
-
-### 12. && and || (#advanced)
-
-Simple shell 1.0 + Handle the `&&` and `||` shell logical operators.
-
-### 13. alias (#advanced)
-
-Simple shell 1.0 + Implement the `alias` builtin command.
-
-### 14. Variables (#advanced)
-
-Simple shell 1.0 + Handle variables replacement.
-
-### 15. Comments (#advanced)
-
-Simple shell 1.0 + Handle comments (`#`).
-
-### 16. File as input (#advanced)
-
-Simple shell 1.0 + Your shell can take a file as a command line argument.
-
-- `man sh`
-
-## Authors
-
-- Talal Omer
-- Tariq Omer
+For detailed implementation requirements and specifications, refer to the task sections above.

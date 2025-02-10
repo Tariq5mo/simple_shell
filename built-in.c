@@ -1,13 +1,20 @@
+/**
+ * This file implements built-in shell commands
+ * Handles exit, environment variables, and related error handling
+ */
+
 #include "main.h"
 
 /**
- * ex - execute exit command
+ * ex - implements exit built-in command
+ * Handles clean exit with optional status code
+ * Frees all allocated memory before exiting
  *
- * @av: arguments of the program
- * @as: arguments of the command
- * @i: the pid of the process
- * @path: pointer to path
- * @j: the index of null pointer in environment
+ * @av: program arguments for error reporting
+ * @as: command arguments including exit code
+ * @i: process ID for error messages
+ * @path: PATH linked list to free
+ * @j: environment array terminator index
  */
 void ex(char **av, char **as, size_t i, path_l *path, int j)
 {
@@ -37,11 +44,14 @@ void ex(char **av, char **as, size_t i, path_l *path, int j)
 		exit(n);
 	}
 }
+
 /**
- * is_it_number - check if content of a string is a number
+ * is_it_number - validates string as numeric value
+ * Used for exit status validation
+ * Ensures proper numeric format for exit codes
  *
- * @s: the string
- * Return: 0 is a number, -1 otherwise
+ * @s: string to validate
+ * Return: 0 if valid number, -1 if invalid
  */
 int is_it_number(char *s)
 {
@@ -52,12 +62,15 @@ int is_it_number(char *s)
 			return (-1);
 	return (0);
 }
+
 /**
- * error_exit - print error of not finding the command
+ * error_exit - generates exit command error message
+ * Formats error for invalid exit arguments
+ * Writes formatted message to standard error
  *
- * @av: arguments of the program
- * @as: arguments of the command
- * @i: the pid of the process
+ * @av: program arguments
+ * @as: exit command arguments
+ * @i: process ID for message
  */
 void error_exit(char **av, char **as, size_t i)
 {
@@ -85,10 +98,13 @@ void error_exit(char **av, char **as, size_t i)
 	free(c);
 	free(pid);
 }
+
 /**
- * _env - execute env command
+ * _env - implements env built-in command
+ * Displays all environment variables
+ * Writes each variable on a new line
  *
- * @en: pointer to environment
+ * @en: pointer to environment array
  */
 void _env(char **en)
 {

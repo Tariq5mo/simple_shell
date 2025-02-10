@@ -1,10 +1,17 @@
+/**
+ * This file handles PATH resolution and command location functionality
+ * Contains utilities for string manipulation and command path searching
+ */
+
 #include "main.h"
 
 /**
- * _strlen - lenght
+ * _strlen - calculates string length
+ * Helper function used throughout shell for string operations
+ * Counts characters until null terminator
  *
- * @s: a  string
- * Return: the length of the string
+ * @s: string to measure
+ * Return: length of string
  */
 int _strlen(char *s)
 {
@@ -17,12 +24,14 @@ int _strlen(char *s)
 }
 
 /**
- * str_concat - connect two strings
+ * str_concat - concatenates two strings safely
+ * Allocates new memory for combined string
+ * Handles null inputs by treating them as empty strings
  *
- * @s1: 1st string
- * @s2: 2nd string
- * Return: the whole string
-*/
+ * @s1: first string
+ * @s2: second string
+ * Return: newly allocated concatenated string or NULL on failure
+ */
 char *str_concat(char *s1, char *s2)
 {
 	int i, j;
@@ -42,13 +51,16 @@ char *str_concat(char *s1, char *s2)
 	s[i] = '\0';
 	return (s);
 }
+
 /**
- * find_in_path - search the command in path's directories
+ * find_in_path - searches PATH directories for command
+ * Tries to locate executable in each PATH directory
+ * Essential for command resolution without full paths
  *
- * @args: the arguments of shell
- * @p: the head of path's linked list
- * Return: 0 on success, -1 of failure
-*/
+ * @args: shell command arguments
+ * @p: linked list of PATH directories
+ * Return: 0 if command found, -1 if not found
+ */
 int find_in_path(char **args, path_l *p)
 {
 	char *c, *dic, *com;
@@ -76,13 +88,16 @@ int find_in_path(char **args, path_l *p)
 	free(c);
 	return (-1);
 }
+
 /**
- * not_found - print error of not finding the command
+ * not_found - generates command not found error message
+ * Formats error message with program name and process ID
+ * Writes formatted error to standard error
  *
- * @av: arguments of the program
- * @as: arguments of the command
- * @i: the pid of the process
-*/
+ * @av: program arguments
+ * @as: shell command arguments
+ * @i: process ID
+ */
 void not_found(char **av, char **as, size_t i)
 {
 	int j;

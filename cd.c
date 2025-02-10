@@ -1,11 +1,18 @@
+/**
+ * This file implements directory navigation functionality
+ * Handles cd command and directory path management
+ */
+
 #include "main.h"
 
 /**
- * _cd - change dir
+ * _cd - implements cd (change directory) command
+ * Supports absolute paths, relative paths, and special arguments
+ * Handles cd with no args (home), cd -, and cd ..
  *
- * @av: arguments of program
- * @as: arguments of shell
- * @j: the pid
+ * @av: program arguments for error reporting
+ * @as: command arguments (cd command and target)
+ * @j: process ID for error messages
  */
 void _cd(char **av, char **as, size_t j)
 {
@@ -14,12 +21,12 @@ void _cd(char **av, char **as, size_t j)
 
 	old = _getenv_for_build_path("PWD");
 	oldpwd = getcwd(old, _strlen(old) + 1);
-	if (!as[1])/*no argument*/
+	if (!as[1]) /*no argument*/
 	{
 		change_dir(av, _getenv_for_build_path("HOME"), oldpwd, j);
 		return;
 	}
-	else if (_strcmp(as[1], "..") == 0)/*change to previous dir*/
+	else if (_strcmp(as[1], "..") == 0) /*change to previous dir*/
 	{
 		s = _strdup(oldpwd);
 		for (i = _strlen(s) - 2; s[i] != '/'; i--)
@@ -28,7 +35,7 @@ void _cd(char **av, char **as, size_t j)
 		free(s);
 		return;
 	}
-	else if (_strcmp(as[1], "-") == 0)/*print PWD*/
+	else if (_strcmp(as[1], "-") == 0) /*print PWD*/
 	{
 		write(1, oldpwd, _strlen(oldpwd));
 		write(1, "\n", 2);
@@ -45,13 +52,16 @@ void _cd(char **av, char **as, size_t j)
 	free(s);
 	free(c);
 }
+
 /**
- * change_dir - change directory
+ * change_dir - performs actual directory change
+ * Updates PWD and OLDPWD environment variables
+ * Handles error reporting for invalid directories
  *
- * @as: the arguments of shell
- * @pwd: the directory well be the pwd
- * @oldpwd: the directory well be the oldpwd
- * @i: the pid
+ * @as: shell command arguments
+ * @pwd: new directory path
+ * @oldpwd: current directory before change
+ * @i: process ID for error messages
  */
 void change_dir(char **as, char *pwd, char *oldpwd, size_t i)
 {

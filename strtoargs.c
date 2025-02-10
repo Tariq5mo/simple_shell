@@ -1,18 +1,25 @@
+/**
+ * This file contains functions for string manipulation and memory management
+ * used by the shell to handle command parsing and argument management.
+ */
+
 #include "main.h"
 
 /**
  * strtoargs - convert a string to array of strings(arguments)
+ * Takes a command string and splits it into an array of argument strings
+ * First counts words, then allocates memory and copies each word
  *
- * @ptr: pointer to the string
- * Return: the array of strings
-*/
+ * @ptr: pointer to the input command string
+ * Return: array of strings (arguments) or NULL if no words found
+ */
 char **strtoargs(char *ptr)
 {
 	char **s, *p, *str;
 	int i, w;
 
 	str = _strdup(ptr);
-	for (i = w = 0; str[i];)/*how many words in ptr*/
+	for (i = w = 0; str[i];) /*how many words in ptr*/
 	{
 		if (str[i] == ' ')
 			i++;
@@ -42,25 +49,29 @@ char **strtoargs(char *ptr)
 	return (s);
 }
 /**
- * free_strings - free array of strings
+ * free_strings - deallocates memory for an array of strings
+ * Properly frees both the individual strings and the array itself
+ * Important for preventing memory leaks in the shell
  *
- * @grid: The two dimensional array
-*/
+ * @grid: The array of strings to free
+ */
 void free_strings(char **grid)
 {
 	int i;
 
 	if (!grid)
 		return;
-	for (i = 0; grid[i]; i++)/*Free the rest of the the grid*/
-		free(grid[i]);/*Then the array of pointers*/
+	for (i = 0; grid[i]; i++) /*Free the rest of the the grid*/
+		free(grid[i]);		  /*Then the array of pointers*/
 	free(grid);
 }
 /**
- * _strdup - put a string to new memory location
+ * _strdup - creates a duplicate of a string in new memory
+ * Allocates new memory and copies string contents
+ * Used for safe string duplication throughout the shell
  *
- * @str: The_old_string
- * Return: new_string
+ * @str: The source string to duplicate
+ * Return: Pointer to the new string or NULL if allocation fails
  */
 char *_strdup(char *str)
 {
@@ -78,9 +89,11 @@ char *_strdup(char *str)
 	return (s);
 }
 /**
- * rev_string - reverse an array
+ * rev_string - reverses characters in a string in-place
+ * Used for string manipulation operations
+ * Particularly useful for number-to-string conversions
  *
- * @s: is a pointer to first elemnt
+ * @s: The string to reverse
  */
 void rev_string(char *s)
 {
@@ -96,12 +109,14 @@ void rev_string(char *s)
 	}
 }
 /**
- * _calloc -  allocates memory for an array
+ * _calloc - custom implementation of calloc
+ * Allocates memory for an array and initializes to zero
+ * Provides memory allocation with error checking
  *
- * @nmemb: The elements's number
- * @size: The size of each element
- * Return: void
-*/
+ * @nmemb: Number of elements to allocate
+ * @size: Size of each element
+ * Return: Pointer to allocated memory or NULL on failure
+ */
 void *_calloc(unsigned int nmemb, unsigned int size)
 {
 	void *ptr;
@@ -110,7 +125,7 @@ void *_calloc(unsigned int nmemb, unsigned int size)
 
 	if (nmemb == 0 || size == 0)
 		return (NULL);
-	ptr = malloc((nmemb) * size);
+	ptr = malloc((nmemb)*size);
 	if (ptr == 0)
 		return (NULL);
 	s = ptr;

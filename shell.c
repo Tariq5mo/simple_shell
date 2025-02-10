@@ -1,13 +1,19 @@
+/**
+ * This file contains the core shell functionality including the main loop
+ * and command execution logic for both interactive and non-interactive modes
+ */
+
 #include "main.h"
 
 /**
- * main - the core of simple shell
+ * main - entry point for the shell program
+ * Initializes shell environment and chooses appropriate execution mode
+ * Handles both interactive (terminal) and non-interactive (pipe/file) modes
  *
- * @argc: the number of arguments
- * @argv: the arguments of shell
- * @env: pointer to The Environment
- * Return: 0 S
-uccess, -1 on failure
+ * @argc: argument count
+ * @argv: argument vector
+ * @env: environment variables array
+ * Return: 0 on Success, -1 on failure
  */
 int main(int argc, char **argv, char **env)
 {
@@ -24,13 +30,16 @@ int main(int argc, char **argv, char **env)
 		none_interactive(argv, j, st, path);
 	return (0);
 }
+
 /**
- * none_interactive - execute the none_interactive mode
+ * none_interactive - handles shell execution in non-interactive mode
+ * Used when input comes from a pipe or file rather than terminal
+ * Processes commands until EOF without displaying prompts
  *
- * @argv: the arguments of the program
- * @j: the index of null pointer in environment
- * @st: the stat
- * @path: pointer to the PATH
+ * @argv: program arguments
+ * @j: environment null pointer index
+ * @st: file status struct
+ * @path: linked list of PATH directories
  */
 void none_interactive(char **argv, size_t j, struct stat st, path_l *path)
 {
@@ -58,19 +67,22 @@ void none_interactive(char **argv, size_t j, struct stat st, path_l *path)
 		if (stat(args[0], &st) == 0)
 			execute(args, &w);
 		else if (_strcmp(args[0], "env") != 0 &&
-			 find_in_path(args, path) == 0)
+				 find_in_path(args, path) == 0)
 			execute(args, &w);
 		else if (does_it_Builtin(argv, args, i, path, j) == -1)
 			not_found(argv, args, i);
 	}
 }
+
 /**
- * interactive - execute the interactive mode
+ * interactive - handles shell execution in interactive mode
+ * Displays prompt, reads user input, and executes commands
+ * Provides command-line interface when shell runs in terminal
  *
- * @argv: the arguments of the program
- * @j: the index of null pointer in environment
- * @st: the stat
- * @path: pointer to the PATH
+ * @argv: program arguments
+ * @j: environment null pointer index
+ * @st: file status struct
+ * @path: linked list of PATH directories
  */
 void interactive(char **argv, size_t j, struct stat st, path_l *path)
 {
@@ -100,18 +112,21 @@ void interactive(char **argv, size_t j, struct stat st, path_l *path)
 		if (stat(args[0], &st) == 0)
 			execute(args, &w);
 		else if (_strcmp(args[0], "env") != 0 &&
-			 find_in_path(args, path) == 0)
+				 find_in_path(args, path) == 0)
 			execute(args, &w);
 		else if (does_it_Builtin(argv, args, i, path, j) == -1)
 			not_found(argv, args, i);
 	}
 }
+
 /**
- * execute - execute the commands
+ * execute - creates child process and executes command
+ * Forks process and uses execve to run commands
+ * Parent process waits for child completion
  *
- * @as: the command and it's arguments
- * @w: the argument of wait function
-*/
+ * @as: array of command and arguments
+ * @w: pointer to store wait status
+ */
 void execute(char **as, int *w)
 {
 	if (fork() == 0)
@@ -122,15 +137,18 @@ void execute(char **as, int *w)
 	else
 		wait(w);
 }
+
 /**
- * does_it_Builtin - check & execute if the command is Built-in
+ * does_it_Builtin - checks if command is a builtin and executes if so
+ * Handles built-in commands: exit, env, setenv, unsetenv, cd
+ * Returns success/failure to indicate if command was handled
  *
- * @av: arguments of the program
- * @as: arguments of the command
- * @i: the pid of the process
- * @path: pointer to path
- * @j: the index of null pointer in environment
- * Return: 0 is Built-in and executed, -1 otherwise
+ * @av: program arguments
+ * @as: command arguments
+ * @i: process ID
+ * @path: PATH linked list
+ * @j: environment null pointer index
+ * Return: 0 if builtin executed, -1 if not a builtin
  */
 int does_it_Builtin(char **av, char **as, size_t i, path_l *path, int j)
 {
